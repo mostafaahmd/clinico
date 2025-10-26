@@ -23,7 +23,7 @@ Future<void> setupDi() async {
   sl.registerLazySingleton(() => PrefsService());
 
   // Repositories (تتعامل مع الـ services/clients وتخدم الـ domain)
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl<SupabaseService>()));
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl<SupabaseClient>()));
 
   // TODO: لاحقًا — سجّل chatRepo, medsRepo, appointmentsRepo … إلخ
 }

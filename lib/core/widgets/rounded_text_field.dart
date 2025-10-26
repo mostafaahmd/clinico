@@ -1,60 +1,67 @@
-import 'package:clinico/core/theming/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:clinico/core/theming/app_colors.dart';
 
 class RoundedTextField extends StatelessWidget {
   const RoundedTextField({
     super.key,
     required this.controller,
     required this.label,
+    this.keyboardType,
     this.obscureText = false,
     this.suffix,
-    this.keyboardType,
+    this.inputFormatters = const [],
     this.autofillHints,
-    this.height = 58,
+    this.validator,              // ✅ جديد
+    this.onChanged,              // اختياري
+    this.maxLines = 1,
+    this.enabled = true,
   });
 
   final TextEditingController controller;
   final String label;
+  final TextInputType? keyboardType;
   final bool obscureText;
   final Widget? suffix;
-  final TextInputType? keyboardType;
+  final List<TextInputFormatter> inputFormatters;
   final Iterable<String>? autofillHints;
-  final double height;
+  final String? Function(String?)? validator;   // ✅ جديد
+  final ValueChanged<String>? onChanged;        // اختياري
+  final int maxLines;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(18)),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 22,
-            offset: Offset(0, 10),
-          ),
-        ],
-      ),
-      child: SizedBox(
-        height: height,
-        child: TextField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          autofillHints: autofillHints,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(color: AppColors.hint),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18),
-              borderSide: BorderSide.none,
-            ),
-            suffixIcon: suffix,
-          ),
+    return TextFormField(                    // ✅ TextFormField (مش TextField)
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      inputFormatters: inputFormatters,
+      autofillHints: autofillHints,
+      validator: validator,                  // ✅ مرّرها هنا
+      onChanged: onChanged,
+      maxLines: obscureText ? 1 : maxLines,
+      enabled: enabled,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.white,
+        suffixIcon: suffix,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
         ),
       ),
+      style: const TextStyle(color: AppColors.textDark),
     );
   }
 }

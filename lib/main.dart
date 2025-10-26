@@ -13,6 +13,7 @@ Future<void> main() async {
   // لازم قبل أي عمليات async
   WidgetsFlutterBinding.ensureInitialized();
 
+
   // قيم Supabase من --dart-define أو ملف env
   const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
   const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
@@ -24,16 +25,21 @@ Future<void> main() async {
   );
 
   // تهيئة Supabase
-  await Supabase.initialize(
-    url: supabaseUrl,
-    anonKey: supabaseAnonKey,
-  );
+await Supabase.initialize(
+  url: supabaseUrl,
+  anonKey: supabaseAnonKey,
+  authOptions: const FlutterAuthClientOptions(
+    autoRefreshToken: true,
+  ),
+);
+
 
   // تهيئة الـ DI (get_it)
   await setupDi();
 
   // تهيئة قنوات الإشعارات وطلب الصلاحيات عند الحاجة
   await NotificationService.ensureInit();
+
 
   // شغّل التطبيق داخل ProviderScope (Riverpod)
   runApp(const ProviderScope(child: ClinicoApp()));

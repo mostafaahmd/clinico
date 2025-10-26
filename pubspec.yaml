@@ -11,7 +11,7 @@ environment:
 flutter:
   uses-material-design: true
   assets:
-    - assets/logo_stethoscope.png # لو هتضيف صور/أيقونات؛ أنشئ مجلد assets
+    - assets/ # لو هتضيف صور/أيقونات؛ أنشئ مجلد assets
 
 # الحِزم الأساسية للمشروع (Dependencies)
 dependencies:
@@ -42,6 +42,8 @@ dependencies:
 
   # للتسلسل/التحويل إلى JSON والعكس
   json_annotation: ^4.9.0
+
+  fl_chart: ^0.68.0 # لرسم الرسوم البيانية (تقدم التغذية)
 
 # أدوات التطوير والبناء (Dev Dependencies)
 dev_dependencies:

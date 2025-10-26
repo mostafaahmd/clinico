@@ -1,4 +1,5 @@
 {
   "SUPABASE_URL": "https://jesxlukrhsjbbprcoiqi.supabase.co",
+  "SUPABASE_SERVICE_ROLE_KEY" : "d58bef6937f9e2edf2e9c336b8f9e553a0b6770ac3b02b61080ca85808c94287",
   "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Implc3hsdWtyaHNqYmJwcmNvaXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4NjU2NzYsImV4cCI6MjA3NjQ0MTY3Nn0.7u8cpBgKB7W63BpzjKQOvbc0eh_UjH-G_0U1jimXjGU"
 }

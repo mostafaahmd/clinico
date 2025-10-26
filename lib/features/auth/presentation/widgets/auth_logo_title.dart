@@ -16,7 +16,7 @@ class AuthLogoTitle extends StatelessWidget {
             'assets/logo_stethoscope.png',
             fit: BoxFit.contain,
             errorBuilder: (_, __, ___) =>
-                const Icon(Icons.health_and_safety_rounded, size: 120, color: AppColors.blue),
+                const Icon(Icons.health_and_safety_rounded, size: 120, color: AppColors.primary),
           ),
         ),
         const SizedBox(height: 6),
@@ -25,7 +25,7 @@ class AuthLogoTitle extends StatelessWidget {
           style: TextStyle(
             fontSize: titleSize,
             fontWeight: FontWeight.w800,
-            color: AppColors.title,
+            color: AppColors.textDark,
             letterSpacing: 0.2,
             height: 1.1,
           ),
@@ -34,7 +34,7 @@ class AuthLogoTitle extends StatelessWidget {
         Text(
           'Your smart health companion',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.subtitle,
+                color: AppColors.textSoft,
                 height: 1.4,
               ),
           textAlign: TextAlign.center,
