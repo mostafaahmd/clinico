@@ -74,7 +74,8 @@ class HomePage extends ConsumerWidget {
                           onPressed: () => context.push('/add-meal'),
                           child: const Text(
                             'Add Meal',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -183,7 +184,10 @@ class _FeatureCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: const Color(0xFFE9EEF9)),
             boxShadow: const [
-              BoxShadow(color: Color(0x0F000000), blurRadius: 14, offset: Offset(0, 6)),
+              BoxShadow(
+                  color: Color(0x0F000000),
+                  blurRadius: 14,
+                  offset: Offset(0, 6)),
             ],
           ),
           padding: const EdgeInsets.all(16),
@@ -233,8 +237,12 @@ class _BottomNavBar extends ConsumerWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-        boxShadow: [BoxShadow(color: Color(0x14000000), blurRadius: 12, offset: Offset(0, -2))],
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+              color: Color(0x14000000), blurRadius: 12, offset: Offset(0, -2))
+        ],
       ),
       child: SafeArea(
         top: false,
@@ -253,14 +261,12 @@ class _BottomNavBar extends ConsumerWidget {
                 },
               ),
               _NavIcon(
-                icon: Icons.notifications_none,
+                icon: Icons.lightbulb_circle,
                 index: 1,
                 current: i,
                 onTap: () {
                   ref.read(navIndexProvider.notifier).state = 1;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Notifications — Coming soon')),
-                  );
+                  context.push('/voice'); // ⬅️ افتح صفحة المساعد الصوتي
                 },
               ),
               _NavIcon(

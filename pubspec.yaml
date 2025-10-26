@@ -45,6 +45,10 @@ dependencies:
 
   fl_chart: ^0.68.0 # لرسم الرسوم البيانية (تقدم التغذية)
 
+  speech_to_text: ^7.3.0 # لتحويل الصوت إلى نص
+
+  flutter_tts: ^4.2.3 # لتحويل النص إلى صوت
+
 # أدوات التطوير والبناء (Dev Dependencies)
 dev_dependencies:
   # لاختبارات Flutter

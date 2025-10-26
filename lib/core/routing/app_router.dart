@@ -13,6 +13,7 @@ import 'package:clinico/features/medicines/presentation/widgets/medicine_form_pa
 import 'package:clinico/features/onboarding/presentation/screens/onboarding_health_page.dart';
 import 'package:clinico/features/progress/presentation/screens/progress_page.dart';
 import 'package:clinico/features/settings/presentation/screens/settings_page.dart';
+import 'package:clinico/features/voice/presentation/screens/voice_assisstant_page.dart';
 import 'package:clinico/features/weight/presentation/screens/weight_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -59,6 +60,7 @@ final appRouter = GoRouter(
     GoRoute(path: '/progress',      builder: (_, __) => const ProgressPage()),
     GoRoute(path: '/settings',      builder: (_, __) => const SettingsPage()),
     GoRoute(path: '/my-weight',     builder: (_, __) => const WeightListPage()),
+    GoRoute(path: '/voice', builder: (_, __) => const VoiceAssistantPage()),
   ],
 
   // Guard/Redirect بسيط
