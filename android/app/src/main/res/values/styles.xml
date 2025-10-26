@@ -1,19 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Splash لأندرويد 12+ مع fallback لما قبله -->
-    <style name="Theme.App.Starting" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Android 12+ API -->
-        <item name="android:windowSplashScreenBackground">@color/splash_bg</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo_inset</item>
-        <item name="android:windowSplashScreenAnimationDuration">400</item>
-        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
-
-        <!-- أقل من 12 -->
-        <item name="android:windowBackground">@drawable/splash_compat_bg</item>
+    <!-- Splash (قبل رسم Flutter) -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
 
-    <!-- ثيم التطبيق بعد ما Flutter يشتغل (اختياري لو محتاجه مستقبلاً) -->
-    <style name="Theme.App.Normal" parent="Theme.Material3.Light.NoActionBar" />
+    <!-- الثيم بعد ما Flutter يرسم -->
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
 </resources>
-

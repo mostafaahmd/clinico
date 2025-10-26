@@ -12,40 +12,68 @@ class IntentResult {
 }
 
 class IntentsEngine {
-  // كلمات مفتاحية بالعربي/الإنجليزي
+  // تطبيع عربي بسيط: يشيل التشكيل، يوحّد الألفات، يحوّل ة→ه، ى→ي، يشيل المدّة، ويحذف "ال" للتطبيع.
+  String _normalize(String input) {
+    var s = input.toLowerCase();
+
+    // إزالة التشكيل والمدّة
+    s = s.replaceAll(RegExp(r'[\u0617-\u061A\u064B-\u0652\u0640]'), '');
+
+    // توحيد الحروف
+    const repl = {
+      'أ': 'ا', 'إ': 'ا', 'آ': 'ا', 'ٱ': 'ا',
+      'ة': 'ه',
+      'ى': 'ي',
+      'ؤ': 'و', 'ئ': 'ي',
+    };
+    repl.forEach((k, v) => s = s.replaceAll(k, v));
+
+    // تصغير تأثير أداة التعريف "ال"
+    s = s.replaceAll(RegExp(r'\bال'), ' ');
+
+    // مسافات إضافية
+    s = s.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return s;
+  }
+
+  bool _hasAny(String s, List<String> keys) => keys.any((k) => s.contains(k));
+
   IntentResult parse(String q) {
-    final s = q.toLowerCase();
+    final s = _normalize(q);
 
     // فتح صفحات
-    if (_hasAny(s, ['progress', 'البروجريس', 'التقدم'])) {
+    if (_hasAny(s, ['progress', 'بروجريس', 'تقدم'])) {
       return IntentResult(IntentType.openProgress);
     }
-    if (_hasAny(s, ['settings', 'سيتي', 'الإعدادات', 'الاعدادات'])) {
+
+    if (_hasAny(s, ['settings', 'اعدادات', 'الاعدادات', 'ضبط'])) {
       return IntentResult(IntentType.openSettings);
     }
-    if (_hasAny(s, ['meals', 'الوجبات', 'اكل', 'meal plan'])) {
-      if (_hasAny(s, ['add', 'اضف', 'سجل', 'اضافة'])) {
+
+    // وجبات
+    if (_hasAny(s, ['meal', 'meals', 'وجبه', 'وجبات', 'اكل', 'وجبه', 'meal plan'])) {
+      if (_hasAny(s, ['add', 'اضف', 'سجل', 'اضافه'])) {
         return IntentResult(IntentType.addMeal);
       }
       return IntentResult(IntentType.openMeals);
     }
-    if (_hasAny(s, ['medicine', 'الدواء', 'ادوية', 'دوائي'])) {
-      if (_hasAny(s, ['add', 'اضف', 'سجل', 'اضافة'])) {
+
+    // أدوية (مرادفات + أشكال كتابة مختلفة)
+    if (_hasAny(s, [
+      'medicine', 'دواء', 'ادويه', 'ادويه', 'ادويتي', 'دوائي'
+    ])) {
+      if (_hasAny(s, ['add', 'اضف', 'سجل', 'اضافه'])) {
         return IntentResult(IntentType.addMedicine);
       }
       return IntentResult(IntentType.openMedicines);
     }
 
-    // مساعدة
-    if (_hasAny(s, ['help', 'مساعدة', 'تساعدني'])) {
+    if (_hasAny(s, ['help', 'مساعده', 'تساعدني'])) {
       return IntentResult(IntentType.help);
     }
 
     return IntentResult(IntentType.unknown);
   }
-
-  bool _hasAny(String s, List<String> keys) =>
-      keys.any((k) => s.contains(k));
 }
 
 /// تنفيذ الفعل + الرد الصوتي
@@ -53,7 +81,7 @@ Future<String> handleIntent(IntentResult r, GoRouter router) async {
   switch (r.type) {
     case IntentType.addMeal:
       router.push('/add-meal');
-      return 'تمام. افتحت لك إضافة وجبة.';
+      return 'تمام. افتحت لك إضافة وجبه.';
     case IntentType.openMeals:
       router.push('/meal-plan');
       return 'تمام. دي خطة وجباتك.';
@@ -72,6 +100,6 @@ Future<String> handleIntent(IntentResult r, GoRouter router) async {
     case IntentType.help:
       return 'تقدر تقول: افتح الأدوية، أضف وجبة، افتح الإعدادات، أو اعرض التقدم.';
     case IntentType.unknown:
-      return 'معلش، ما فهمتش. جرّب تقول: افتح الأدوية، أو أضف وجبة.';
+      return 'معلش، ما فهمتش. جرّب تقول: افتح الأدوية، أو أضف وجبه.';
   }
 }
