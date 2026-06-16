@@ -48,6 +48,11 @@ dependencies:
   speech_to_text: ^7.3.0 # لتحويل الصوت إلى نص
 
   flutter_tts: ^4.2.3 # لتحويل النص إلى صوت
+  local_auth: ^2.3.0
+  flutter_secure_storage: ^10.0.0
+  flutter_bloc: ^9.1.1
+  local_auth_android: ^1.0.48
+  local_auth_darwin: ^1.4.3
 
 # أدوات التطوير والبناء (Dev Dependencies)
 dev_dependencies:

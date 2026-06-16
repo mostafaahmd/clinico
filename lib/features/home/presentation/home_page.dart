@@ -42,7 +42,7 @@ class HomePage extends ConsumerWidget {
                           _FeatureItem(
                             asset: 'assets/doctor.png',
                             title: 'Contact Doctor',
-                            onTap: () => _todo(context, 'Contact Doctor'),
+                            onTap: () => context.push('/doctors'),
                           ),
                           _FeatureItem(
                             asset: 'assets/medicines.png',
@@ -270,14 +270,12 @@ class _BottomNavBar extends ConsumerWidget {
                 },
               ),
               _NavIcon(
-                icon: Icons.search,
+                icon: Icons.medical_services_outlined,
                 index: 2,
                 current: i,
                 onTap: () {
                   ref.read(navIndexProvider.notifier).state = 2;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Search — Coming soon')),
-                  );
+                  context.push('/medicines');
                 },
               ),
               _NavIcon(

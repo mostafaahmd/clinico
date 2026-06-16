@@ -1,11 +1,11 @@
 <resources>
     <!-- Splash (قبل رسم Flutter) -->
-    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+    <style name="LaunchTheme" parent="Theme.AppCompat.DayNight">
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
 
     <!-- الثيم بعد ما Flutter يرسم -->
-    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowBackground">@android:color/white</item>
+    <style name="NormalTheme" parent="Theme.AppCompat.DayNight">
+        <item name="android:windowBackground">?android:colorBackground</item>
     </style>
 </resources>

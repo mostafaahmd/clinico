@@ -1,4 +1,6 @@
 // settings_page.dart
+import 'package:clinico/core/di/service_locator.dart';
+import 'package:clinico/core/security/app_lock_vault.dart';
 import 'package:clinico/core/theming/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -11,6 +13,16 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool medsReminders = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    await sl<AppLockVault>().setBiometricEnabled(true);
+  }
 
   @override
   Widget build(BuildContext context) {
