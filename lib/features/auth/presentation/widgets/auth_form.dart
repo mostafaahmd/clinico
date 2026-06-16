@@ -20,7 +20,8 @@ class _AuthFormState extends ConsumerState<AuthForm> {
   String? _validate() {
     final email = _email.text.trim();
     final pass = _pass.text;
-    if (email.isEmpty || !email.contains('@')) return 'Please enter a valid email';
+    if (email.isEmpty || !email.contains('@'))
+      return 'Please enter a valid email';
     if (pass.length < 6) return 'Password must be at least 6 characters';
     return null;
   }
@@ -31,22 +32,38 @@ class _AuthFormState extends ConsumerState<AuthForm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
-    final ctrl = ref.read(authControllerProvider.notifier);
     final email = _email.text.trim();
     final pass = _pass.text;
-    await ctrl.signIn(email, pass);
-
+    await ref.read(authControllerProvider.notifier).signIn(
+          email: email,
+          password: pass,
+        );
     ref.read(authControllerProvider).when(
-      data: (_) => context.go('/home'),
-      loading: () {},
-      error: (e, _) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()))),
-    );
+          data: (_) => context.go('/home'),
+          loading: () {},
+          error: (e, _) => ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(e.toString()))),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(authControllerProvider);
+    ref.listen<AsyncValue<void>>(authControllerProvider, (previous, next) {
+      if (!next.isLoading && next.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.error.toString())),
+        );
+        return;
+      }
 
+      final wasLoading = previous?.isLoading ?? false;
+      final isSuccess = wasLoading && next.hasValue;
+
+      if (isSuccess) {
+        context.go('/home');
+      }
+    });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -75,12 +92,17 @@ class _AuthFormState extends ConsumerState<AuthForm> {
           child: FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               foregroundColor: Colors.white,
             ),
             onPressed: state.isLoading ? null : _submit,
             child: state.isLoading
-                ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                ? const SizedBox(
+                    height: 22,
+                    width: 22,
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: Colors.white))
                 : const Text('Login'),
           ),
         ),
@@ -96,7 +118,8 @@ class _AuthFormState extends ConsumerState<AuthForm> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Don't have an account? ", style: TextStyle(color: AppColors.textSoft)),
+            const Text("Don't have an account? ",
+                style: TextStyle(color: AppColors.textSoft)),
             GestureDetector(
               onTap: state.isLoading ? null : () => context.push('/register'),
               child: const Text(

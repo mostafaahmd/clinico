@@ -1,67 +1,136 @@
+import 'dart:async';
+
+import 'package:clinico/core/providers/base_providers.dart';
+import 'package:clinico/features/auth/data/domain/auth_repository.dart';
 import 'package:clinico/features/auth/data/domain/registration_data.dart';
+import 'package:clinico/features/auth/data/repo/auth_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../data/domain/auth_repository.dart';
-import '../../data/repo/auth_repository_impl.dart';
 
-/// Supabase client
-final supabaseProvider = Provider<SupabaseClient>(
-  (ref) => Supabase.instance.client,
-);
+final authRepoProvider = Provider<AuthRepository>((ref) {
+  final supabase = ref.watch(supabaseProvider);
 
-/// Registration controller
-final registerControllerProvider =
-    StateNotifierProvider<RegisterController, AsyncValue<void>>((ref) {
-  return RegisterController(ref);
+  return AuthRepositoryImpl(supabase);
 });
 
-/// Auth repository (واحد بس)
-final authRepoProvider = Provider<AuthRepository>(
-  (ref) => AuthRepositoryImpl(ref.read(supabaseProvider)),
-);
+final authStateChangesProvider = StreamProvider<AuthState>((ref) {
+  final repository = ref.watch(authRepoProvider);
 
-/// (اختياري) كنترولر بسيط يغلّف signIn/signUp
+  return repository.onAuthStateChanged();
+});
+
 final authControllerProvider =
-    StateNotifierProvider<AuthController, AsyncValue<void>>((ref) {
-  return AuthController(ref);
-});
+    AsyncNotifierProvider<AuthController, void>(
+  AuthController.new,
+);
 
-class AuthController extends StateNotifier<AsyncValue<void>> {
-  AuthController(this.ref) : super(const AsyncData(null));
-  final Ref ref;
+final registerControllerProvider =
+    AsyncNotifierProvider<RegisterController, void>(
+  RegisterController.new,
+);
 
-  Future<void> signIn(String email, String pass) async {
-    state = const AsyncLoading();
-    try {
-      await ref.read(authRepoProvider).signIn(email, pass);
-      state = const AsyncData(null);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+final passwordResetControllerProvider =
+    AsyncNotifierProvider<PasswordResetController, void>(
+  PasswordResetController.new,
+);
+
+class AuthController extends AsyncNotifier<void> {
+  @override
+  FutureOr<void> build() {
+    // Initial idle state.
   }
 
-  Future<void> signUp(String email, String pass) async {
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {
     state = const AsyncLoading();
-    try {
-      await ref.read(authRepoProvider).signUp(email, pass);
-      state = const AsyncData(null);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepoProvider);
+
+      await repository.signIn(
+        email.trim(),
+        password,
+      );
+
+      ref.read(appLockSessionProvider.notifier).markUnlocked();
+    });
+  }
+
+  Future<void> signOut() async {
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepoProvider);
+
+      await repository.signOut();
+
+      ref.read(appLockSessionProvider.notifier).reset();
+    });
   }
 }
 
-class RegisterController extends StateNotifier<AsyncValue<void>> {
-  RegisterController(this.ref) : super(const AsyncData(null));
-  final Ref ref;
+class RegisterController extends AsyncNotifier<void> {
+  @override
+  FutureOr<void> build() {
+    // Initial idle state.
+  }
 
   Future<void> register(RegistrationData data) async {
     state = const AsyncLoading();
-    try {
-      await ref.read(authRepoProvider).register(data);
-      state = const AsyncData(null);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepoProvider);
+
+      await repository.register(data);
+    });
+  }
+}
+
+class PasswordResetController extends AsyncNotifier<void> {
+  @override
+  FutureOr<void> build() {
+    // Initial idle state.
+  }
+
+  Future<void> sendResetOtp(String email) async {
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepoProvider);
+
+      await repository.sendResetOtp(email.trim());
+    });
+  }
+
+  Future<void> verifyResetOtp({
+    required String email,
+    required String code,
+  }) async {
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepoProvider);
+
+      await repository.verifyResetOtp(
+        email.trim(),
+        code.trim(),
+      );
+    });
+  }
+
+  Future<void> setNewPassword(String password) async {
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(authRepoProvider);
+
+      await repository.setNewPassword(password);
+    });
+  }
+
+  void resetState() {
+    state = const AsyncData(null);
   }
 }

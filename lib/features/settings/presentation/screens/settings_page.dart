@@ -1,27 +1,43 @@
-// settings_page.dart
-import 'package:clinico/core/di/service_locator.dart';
-import 'package:clinico/core/security/app_lock_vault.dart';
+import 'package:clinico/core/providers/base_providers.dart';
 import 'package:clinico/core/theming/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
+
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool medsReminders = true;
 
   @override
   void initState() {
     super.initState();
-    _init();
+
+    Future.microtask(_init);
   }
 
   Future<void> _init() async {
-    await sl<AppLockVault>().setBiometricEnabled(true);
+    final vault = ref.read(appLockVaultProvider);
+
+    await vault.setBiometricEnabled(true);
+  }
+
+  Future<void> _signOut() async {
+    final navigator = Navigator.of(context);
+    final supabase = ref.read(supabaseProvider);
+    final lockSession = ref.read(appLockSessionProvider.notifier);
+
+    await supabase.auth.signOut();
+
+    lockSession.reset();
+
+    if (!mounted) return;
+
+    navigator.pop();
   }
 
   @override
@@ -38,15 +54,16 @@ class _SettingsPageState extends State<SettingsPage> {
           SwitchListTile(
             title: const Text('Medicine reminders'),
             value: medsReminders,
-            onChanged: (v) => setState(() => medsReminders = v),
+            onChanged: (value) {
+              setState(() {
+                medsReminders = value;
+              });
+            },
           ),
           ListTile(
             title: const Text('Sign out'),
             trailing: const Icon(Icons.logout),
-            onTap: () async {
-              await Supabase.instance.client.auth.signOut();
-              if (mounted) Navigator.pop(context);
-            },
+            onTap: _signOut,
           ),
         ],
       ),

@@ -1,14 +1,19 @@
+import 'package:clinico/core/providers/app_lock_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubit/app_lock_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LockPage extends StatelessWidget {
+class LockPage extends ConsumerWidget {
+  const LockPage({
+    super.key,
+    this.message,
+  });
+
   final String? message;
-  const LockPage({super.key, this.message});
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<AppLockCubit>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lockState = ref.watch(appLockControllerProvider);
+    final isLoading = lockState.isLoading;
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -32,8 +37,18 @@ class LockPage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: cubit.unlock,
-              child: const Text('Try Again'),
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      ref.read(appLockControllerProvider.notifier).unlock();
+                    },
+              child: isLoading
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Try Again'),
             ),
           ),
         ],
