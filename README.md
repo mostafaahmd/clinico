@@ -39,8 +39,8 @@ flutter run
 - Emergency support
 
 ## Team
+Developed by:
 _Mostafa Ahmed mansour 
 _Rokia sameh mahmoud 
 
 ## License
-This project is open source.
