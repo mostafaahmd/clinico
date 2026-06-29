@@ -1,16 +1,45 @@
-# clinico
+# Clinico
 
-A new Flutter project.
+## About
+Clinico is an open-source healthcare application that helps patients manage their healthcare easily. It provides medication reminders, appointment scheduling, AI voice assistance, and access to doctors and pharmacies.
+
+## Features
+- Medication reminders
+- Appointment scheduling
+- AI Voice Assistant
+- Doctor and pharmacy finder
+- User-friendly interface
+
+## Technologies Used
+- Flutter
+- Firebase
+- AI Integration
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone the repository:
+```bash
+git clone https://github.com/mostafaahmd/clinico.git
+```
 
-A few resources to get you started if this is your first Flutter project:
+2. Install dependencies:
+```bash
+flutter pub get
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. Run the application:
+```bash
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Future Improvements
+- Online consultation
+- AI health recommendations
+- Medical records management
+- Emergency support
+
+## Team
+Developed by the Clinico Team.
+
+## License
+This project is open source.
