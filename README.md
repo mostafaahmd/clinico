@@ -1,3 +1,12 @@
+<p align="center">
+  <img src="assets/images/banner.png" alt="Clinico Banner" width="100%">
+</p>
+
+<h1 align="center">🩺 Clinico</h1>
+
+<p align="center">
+AI-Powered Healthcare Mobile Application
+</p>
 🩺 Clinico
 
 An open-source healthcare application built with Flutter that helps users manage their healthcare efficiently. Clinico combines medication reminders, appointment scheduling, AI-powered assistance, and healthcare services in one easy-to-use mobile application.
