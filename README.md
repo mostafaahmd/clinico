@@ -39,7 +39,8 @@ flutter run
 - Emergency support
 
 ## Team
-Developed by the Clinico Team.
+Mostafa Ahmed mansour 
+Rokia sameh mahmoud 
 
 ## License
 This project is open source.
